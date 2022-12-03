@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
