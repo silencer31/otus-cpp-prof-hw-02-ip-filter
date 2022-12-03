@@ -1,35 +1,19 @@
 #pragma once
 
-#include <string>
-#include <vector>
+#include "type_aliases.h"
 
 // Версия программы.
 int version();
 
-// Чтение списка ip адресов из указанного файла.
-bool get_ip_list_from_file(std::vector<std::vector<std::string> >& vvs, const std::string& filename);
-
-// Запись списка ip адресов в файл.
-bool write_ip_list_to_file(std::vector<std::vector<std::string> >& vvs_ip, const std::string& filename);
-
-// Разделение строки  на вектор строк через указанный символ.
-std::vector<std::string> split(const std::string& str, char d);
-
-// Печать вектора-строк, представляющий ip адрес.
-void print_ip_address(const std::vector<std::string>& ip_addr);
-
-// Вывод на экран вектора с ip адресами - векторами строк .
-void print_ip_vector(const std::vector<std::vector<std::string> >& vvs );
-
-// Спрашиваем пользователя, выводить ли в печать.
-bool ask_to_print(const std::string& question);
+// Преобразование вектора векторов строк в вектор массивов константного размера.
+bool ip_list_transform(const ip_vector_strings& ip_list_from_file, ip_vector_arrays& ip_list_ready_to_use, const size_t& check_size );
 
 // Сортировка в обратном порядке.
-void reverse_sort(std::vector<std::vector<std::string> >& vvs_ip);
+void reverse_sort(ip_vector_arrays& ip_pool);
 
 // Отсортированный вывод в консоль.
-void filter_output(const std::vector<std::vector<std::string> >& vvs_ip, const std::vector<int>& vi_numbers);
+void filter_output(const ip_vector_arrays& ip_pool, const std::vector<int>& vi_numbers);
 
 // Отсортированный вывод в консоль по значению любой октеты.
-void filter_output_by_any_octet(const std::vector<std::vector<std::string> >& vvs_ip, int value);
+void filter_output_by_any_octet(const ip_vector_arrays& ip_pool, int value);
 

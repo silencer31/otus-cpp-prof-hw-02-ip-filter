@@ -1,9 +1,13 @@
 #include "lib.h"
+#include "file_funcs.h"
+#include "print.h"
 
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+
+
 
 int main (int, char **) {
     std::cout << "Version: " << version() << std::endl;
@@ -11,31 +15,44 @@ int main (int, char **) {
 
     try
     {
-        // ¬ектор с ip адресами - векторами строк.
-        std::vector<std::vector<std::string> > ip_pool;
+        // ¬ектор с векторами строк, полученный после чтени€ файла.
+        ip_vector_strings ip_list_from_file;
 
+        size_t ip_pool_size = 0; //  ол-во записей-адресов в файле.
+        
         // „тение списка ip адресов из тестового файла.
-        if (!get_ip_list_from_file(ip_pool, std::string{ "ip_filter.tsv" })) {
+        ip_pool_size = get_ip_list_from_file(ip_list_from_file, std::string{ "ip_filter.tsv" });
+        if ( 0 == ip_pool_size) {
             return EXIT_FAILURE;
         }
-   
+ 
+        ip_vector_arrays ip_pool; // 
+        ip_pool.reserve(ip_pool_size);
+
+        // ѕреобразование вектора векторов строк в вектор массивов константного размера.
+        if (!ip_list_transform(ip_list_from_file, ip_pool, ip_pool_size)) {
+            return EXIT_FAILURE;
+        }
+
         // ¬ывод в консоль оригинального списка.
         if (ask_to_print("\nWould you like to see original ip list?")) {
             print_ip_vector(ip_pool);
         }
-
+        
+        
         // TODO reverse lexicographically sort
         reverse_sort(ip_pool);
         
         if (ask_to_print("\nWould you like to write reversed ip list to file?")) {
             write_ip_list_to_file(ip_pool, std::string{ "reversed_list.txt" });
         }
-
+        
         // ¬ывод в консоль списка, отсортированного в обратном пор€дке.
         if (ask_to_print("\nWould you like to see reversed ip list?")) {
             print_ip_vector(ip_pool);
         }
 
+        
         // ¬ывод в консоль отсортированного списка, но только с 1 в первой октете.
         if (ask_to_print("\nWould you like to see filtered by first byte ip list?")) {
             filter_output(ip_pool, std::vector<int> {1});
@@ -50,7 +67,7 @@ int main (int, char **) {
         if (ask_to_print("\nWould you like to see filtered by any byte ip list?")) {
             filter_output_by_any_octet(ip_pool, 46);
         }
-
+        
         // 222.173.235.246
         // 222.130.177.64
         // 222.82.198.61
